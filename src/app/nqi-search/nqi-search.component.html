@@ -1,0 +1,72 @@
+<div class="flex-grow container mx-auto sm:px-4 pt-6 pb-4">
+    <div class="bg-white border-t border-b sm:border-l sm:border-r sm:rounded shadow">
+      
+        <div>
+            <form class="m-4 flex" (ngSubmit)="onSubmit()" #nqiSearchForm="ngForm" name="nqiSearchForm">
+              <input [(ngModel)]="model.query" class="flex-grow rounded-l-lg p-4 border-t mr-0 border-b border-l text-gray-800 border-gray-200 bg-white focus:outline-none focus:border-yellow-400" 
+                    placeholder="" name="query"/>
+              <button class="px-8 rounded-r-lg bg-yellow-200  text-gray-800 font-bold p-4 border-yellow-400 border-t border-b border-r focus:outline-none focus:bg-yellow-400">ค้นหา</button>
+          </form>
+      </div>
+
+    </div>
+</div>
+
+
+
+
+<div class="flex-grow container mx-auto sm:px-4 pt-0 pb-8" *ngIf="nqiResponse?.numFound > 0">
+    <div class="flex flex-col">
+        <div class="-my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+            <div class="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+                <div class="overflow-hidden border-b border-gray-200 rounded-md shadow-md">
+                    <table class="min-w-full overflow-x-scroll divide-y divide-gray-200">
+                    <thead class="bg-gray-50">
+                        <tr>
+                            <th class="px-6 py-4 font-medium text-gray-500 text-left">ผลลัพธ์การค้นหา {{nqiResponse.numFound}} รายการ</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                       
+                        <tr *ngFor="let doc of nqiResponse.docs"
+                            class="transition-all hover:bg-gray-100 hover:shadow-lg">
+                          <td class="px-6 py-4">
+                            
+                              <div class="ml-4">
+                                <div class="text-xs font-medium text-gray-900 sm:text-sm">
+                                    <a class="text-blue-600 mr-4" href="{{doc.doc_url}}">{{doc.doc_url}}</a>
+                                </div>
+                                <p class="text-xs text-gray-500 sm:text-sm"><span class="font-bold text-gray-900">มาตรฐาน: </span> {{doc.standard}}</p>
+                                <p class="text-xs text-gray-500 sm:text-sm"><span class="font-bold text-gray-900">การทดสอบ: </span>{{doc.testing}}</p>
+                              </div>
+
+                          </td>
+                        </tr>
+                    </tbody>
+                    <tfoot *ngIf="showPaginator">
+                        <tr>
+                            <td class="px-6 py-4 bg-gray-100">
+                                <ul class="flex pl-0 list-none rounded">
+                                    <li class="cursor-pointer relative block py-2 px-3 mr-2 leading-tight bg-white border border-gray-300 text-blue-700 border rounded shadow"
+                                        *ngFor="let page of paginatorString"
+                                        [ngClass]="(this.currentStart == page.start) ? 'bg-gray-300' : 'bg-white hover:bg-gray-200'"
+                                        (click)="searchForPage(page.start)" >
+                                        {{page.text}}</li>
+                                </ul>
+                            
+                            </td>
+                        </tr>
+                    </tfoot>
+                    </table>
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="flex-grow container mx-auto sm:px-4 pt-0 pb-8" *ngIf="nqiResponse?.numFound == 0">
+    <div class="ml-6 text-red-600 font-bold">ไม่พบผลลัพธ์ กรุณาระบุคำค้นใหม่</div>
+</div>
+
+
+
